@@ -102,14 +102,19 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
+          set -o pipefail
           export BUILD_NUMBER=$(git rev-list --count HEAD)
 
-          # Build the APK
-          ./gradlew assembleDebug -PversionBuild=$BUILD_NUMBER --build-cache \
+          # Build the APK. `tee` keeps the full log in build.log while still
+          # streaming it to the workflow console, and `set -o pipefail` makes
+          # sure the step actually fails when gradle does (the previous
+          # `> build.log 2>&1 || cat build.log` pattern swallowed the exit
+          # code, so failures slipped past into the release steps).
+          ./gradlew assembleDebug -PversionBuild=$BUILD_NUMBER --build-cache --stacktrace \
             -Pandroid.injected.signing.store.file=$(pwd)/app/keystore.jks \
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASSWORD > build.log 2>&1 || cat build.log
+            -Pandroid.injected.signing.key.password=$KEY_PASSWORD 2>&1 | tee build.log
 
       # ------------------------------------------------------------------
       # FAILURE HANDLING
@@ -183,11 +188,13 @@ jobs:
           fi
 
           # Locate built APK
-          APK_ORIGINAL=$(find app/build/outputs/apk/debug -name "*.apk" | head -n 1)
+          APK_ORIGINAL=$(find app/build/outputs/apk/debug -name "*.apk" 2>/dev/null | head -n 1)
 
           if [ -z "$APK_ORIGINAL" ]; then
              echo "Error: No APK found to release!"
-             return 1
+             # `return 1` is invalid outside a function; `exit 1` is what we
+             # actually want — it fails the step so the failure handler runs.
+             exit 1
           fi
 
           TARGET_NAME="${APP_NAME}-${VERSION_NAME}-debug.apk"
