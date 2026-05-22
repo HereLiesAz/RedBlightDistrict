@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
+    // Kotlin 2.0+ provides the Compose Compiler via this plugin; the old
+    // `composeOptions { kotlinCompilerExtensionVersion … }` style is no
+    // longer supported.
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 import java.util.Properties
@@ -40,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.hereliesaz.redblightdistrict"
-        minSdk 24
+        minSdk 26
         targetSdk 37
         versionCode currentVersionCode
         versionName currentVersionName
@@ -53,10 +57,6 @@ android {
     buildFeatures {
         buildConfig true
         compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_compiler_version
     }
 
     buildTypes {
@@ -75,14 +75,16 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.core:core-ktx:1.18.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation 'androidx.activity:activity-compose:1.13.0'
 
-    // Compose
-    def composeBom = platform('androidx.compose:compose-bom:2024.02.02')
+    // Compose — pinned to the same BOM and Material3 line AzNavRail 9.0 was
+    // compiled against, otherwise we mix ABIs and the AAR's internal
+    // composables refuse to resolve.
+    def composeBom = platform('androidx.compose:compose-bom:2026.05.00')
     implementation composeBom
     androidTestImplementation composeBom
     implementation 'androidx.compose.ui:ui'
@@ -90,7 +92,7 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation'
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.compose.material:material-icons-extended'
-    implementation 'androidx.navigation:navigation-compose:2.7.7'
+    implementation 'androidx.navigation:navigation-compose:2.9.8'
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
     // AzNavRail
@@ -101,9 +103,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
