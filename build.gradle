@@ -9,7 +9,9 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:9.2.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // AGP 9.0+ has built-in Kotlin support; the kotlin-gradle-plugin
+        // classpath entry is intentionally omitted. Only the Compose Compiler
+        // plugin needs separate classpath bootstrapping.
         classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:$kotlin_version"
     }
 }
