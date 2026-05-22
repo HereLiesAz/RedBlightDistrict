@@ -1,9 +1,8 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    // Kotlin 2.0+ provides the Compose Compiler via this plugin; the old
-    // `composeOptions { kotlinCompilerExtensionVersion … }` style is no
-    // longer supported.
+    // AGP 9.0+ ships built-in Kotlin support; applying `org.jetbrains.kotlin.android`
+    // alongside it now hard-fails at configuration time. The Compose Compiler
+    // plugin is still required separately.
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
@@ -69,8 +68,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
+}
+
+// AGP 9.0's built-in Kotlin support removed the `kotlinOptions { ... }` DSL
+// inside `android { }`. Kotlin config now lives in a top-level `kotlin { }`
+// block via the standard `compilerOptions` DSL.
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
