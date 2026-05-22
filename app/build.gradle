@@ -1,9 +1,8 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    // Kotlin 2.0+ provides the Compose Compiler via this plugin; the old
-    // `composeOptions { kotlinCompilerExtensionVersion … }` style is no
-    // longer supported.
+    // Note: AGP 9.0+ ships with built-in Kotlin support; `org.jetbrains.kotlin.android`
+    // is no longer needed and applying it now fails at configuration time.
+    // The Compose Compiler plugin is still required separately.
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
