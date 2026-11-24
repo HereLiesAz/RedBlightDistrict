@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Color as AColor
 import android.net.Uri
 import android.os.Bundle
+import com.hereliesaz.aznavrail.updates.AzUpdateChecker
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -96,6 +97,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AzUpdateChecker.check(this, "HereLiesAz/RedBlightDistrict")
         Configuration.getInstance().userAgentValue = packageName
         requestNeededPermissions()
         setContent {
