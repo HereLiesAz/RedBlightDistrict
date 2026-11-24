@@ -40,6 +40,7 @@ It acts as a digital scout, helping you identify "Fresh Canvases", avoid "Repeat
 
 ## 🔒 Privacy & Safety
 Ninth Ward Canvas is built with your safety in mind:
+- **Updates:** Release builds check stable GitHub releases using AzNavRail 12.5; GitHub receives the ordinary connection IP address. No notes, photos, pins or location are sent by the checker.
 - **Zero Tracking:** The app does not ping analytics servers or track your IP.
 - **Local Storage:** All your "Optics" (photos), notes, and custom pins are saved directly to `SharedPreferences` on your physical device. Nothing is sent to a central server.
 - **Ghost Button:** Erases all local app storage instantly. Use it if you need to wipe your digital footprint fast.

@@ -17,6 +17,10 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url 'https://raw.githubusercontent.com/HereLiesAz/AzNavRail/update-maven/'
+            content { includeModule('com.github.HereLiesAz.AzNavRail', 'aznavrail-updates-compat') }
+        }
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
